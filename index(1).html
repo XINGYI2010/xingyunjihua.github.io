@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello 欢迎光临</title>
+</head>
+<body>
+  <h1>Hello 欢迎光临</h1>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>游戏账号购买 - 一键下单</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+		}
+		
+		body {
+			background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+			color: #333;
+			line-height: 1.6;
+			min-height: 100vh;
+			padding: 20px;
+		}
+		
+		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+		
+		header {
+			text-align: center;
+			margin-bottom: 30px;
+			padding: 25px;
+			background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+			color: white;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(106, 17, 203, 0.2);
+			position: relative;
+			overflow: hidden;
+		}
+		
+		header::before {
+			content: "";
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+			background-size: 20px 20px;
+			z-index: 0;
+		}
+		
+		header > * {
+			position: relative;
+			z-index: 1;
+		}
+		
+		header h1 {
+			font-size: 2.8rem;
+			margin-bottom: 10px;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
+		
+		header p {
+			font-size: 1.2rem;
+			opacity: 0.95;
+		}
+		
+		.highlight {
+			color: #FFD700;
+			font-weight: bold;
+			display: inline-block;
+			animation: pulse 2s infinite;
+		}
+		
+		@keyframes pulse {
+			0% { transform: scale(1); }
+			50% { transform: scale(1.05); }
+			100% { transform: scale(1); }
+		}
+		
+		.contact-info {
+			background-color: #fff;
+			border-radius: 10px;
+			padding: 15px 25px;
+			margin: 25px auto;
+			max-width: 600px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 15px;
+			border-left: 5px solid #ff6b6b;
+		}
+		
+		.contact-info i {
+			color: #e74c3c;
+			font-size: 1.5rem;
+		}
+		
+		.contact-info strong {
+			color: #e74c3c;
+			font-size: 1.2rem;
+		}
+		
+		.main-content {
+			display: grid;
+			grid-template-columns: 1fr 400px;
+			gap: 30px;
+		}
+		
+		@media (max-width: 1024px) {
+			.main-content {
+				grid-template-columns: 1fr;
+			}
+		}
+		
+		.products-section {
+			background-color: white;
+			border-radius: 15px;
+			padding: 30px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+		}
+		
+		.section-title {
+			font-size: 1.8rem;
+			margin-bottom: 25px;
+			padding-bottom: 15px;
+			border-bottom: 3px solid #3498db;
+			color: #2c3e50;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		
+		.section-title i {
+			color: #3498db;
+		}
+		
+		.recommended-tag {
+			background: linear-gradient(to right, #ff6b6b, #ff8e53);
+			color: white;
+			padding: 5px 15px;
+			border-radius: 20px;
+			font-size: 0.9rem;
+			margin-left: 10px;
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+		
+		.products-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 25px;
+		}
+		
+		.product-card {
+			background-color: white;
+			border-radius: 12px;
+			padding: 20px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+			transition: all 0.3s ease;
+			border: 2px solid #eaeaea;
+			position: relative;
+			overflow: hidden;
+			cursor: pointer;
+		}
+		
+		.product-card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+			border-color: #3498db;
+		}
+		
+		.product-card.recommended {
+			border-color: #ff6b6b;
+			position: relative;
+		}
+		
+		.product-card.recommended::before {
+			content: "店长推荐";
+			position: absolute;
+			top: 10px;
+			right: -30px;
+			background: linear-gradient(to right, #ff6b6b, #ff8e53);
+			color: white;
+			padding: 5px 35px;
+			font-size: 0.8rem;
+			transform: rotate(45deg);
+			z-index: 1;
+		}
+		
+		.product-id {
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			background-color: #f8f9fa;
+			color: #666;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.1rem;
+			font-weight: bold;
+			border: 2px solid #eaeaea;
+		}
+		
+		.product-name {
+			font-size: 1.4rem;
+			color: #2c3e50;
+			margin-bottom: 12px;
+			padding-right: 50px;
+		}
+		
+		.product-content {
+			color: #555;
+			margin-bottom: 20px;
+			font-size: 1rem;
+			min-height: 60px;
+			line-height: 1.5;
+		}
+		
+		.product-price {
+			font-size: 1.8rem;
+			color: #e74c3c;
+			font-weight: bold;
+			margin-bottom: 15px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		
+		.product-price::before {
+			content: "¥";
+			font-size: 1.2rem;
+		}
+		
+		.order-badge {
+			display: inline-block;
+			background-color: #3498db;
+			color: white;
+			padding: 8px 15px;
+			border-radius: 6px;
+			font-size: 0.9rem;
+			margin-top: 10px;
+			transition: all 0.3s;
+		}
+		
+		.product-card:hover .order-badge {
+			background-color: #2980b9;
+			transform: scale(1.05);
+		}
+		
+		.order-section {
+			background-color: white;
+			border-radius: 15px;
+			padding: 30px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+			position: sticky;
+			top: 30px;
+			height: fit-content;
+		}
+		
+		.order-summary {
+			background-color: #f8f9fa;
+			padding: 25px;
+			border-radius: 12px;
+			margin-bottom: 25px;
+			border-left: 5px solid #3498db;
+		}
+		
+		.order-summary h3 {
+			color: #2c3e50;
+			margin-bottom: 15px;
+			font-size: 1.3rem;
+		}
+		
+		.order-item {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+			padding-bottom: 10px;
+			border-bottom: 1px dashed #ddd;
+		}
+		
+		.order-total {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 15px;
+			padding-top: 15px;
+			border-top: 2px solid #3498db;
+			font-size: 1.3rem;
+			font-weight: bold;
+			color: #e74c3c;
+		}
+		
+		.no-selection {
+			text-align: center;
+			color: #777;
+			padding: 30px 0;
+			font-style: italic;
+		}
+		
+		.form-group {
+			margin-bottom: 20px;
+		}
+		
+		.form-group label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: #2c3e50;
+		}
+		
+		.form-group input, .form-group textarea {
+			width: 100%;
+			padding: 14px;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			font-size: 1rem;
+			transition: border 0.3s;
+		}
+		
+		.form-group input:focus, .form-group textarea:focus {
+			border-color: #3498db;
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+		}
+		
+		.btn-submit {
+			background: linear-gradient(to right, #3498db, #2c3e50);
+			color: white;
+			border: none;
+			padding: 18px;
+			border-radius: 10px;
+			cursor: pointer;
+			width: 100%;
+			font-size: 1.2rem;
+			font-weight: bold;
+			transition: all 0.3s;
+			margin-top: 15px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+		}
+		
+		.btn-submit:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+		}
+		
+		.btn-submit:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+			transform: none;
+			box-shadow: none;
+		}
+		
+		.order-notice {
+			font-size: 0.9rem;
+			color: #777;
+			margin-top: 25px;
+			padding-top: 20px;
+			border-top: 1px dashed #ddd;
+			text-align: center;
+		}
+		
+		.other-combination {
+			background-color: #f8f9fa;
+			padding: 25px;
+			border-radius: 12px;
+			text-align: center;
+			margin-top: 40px;
+			border: 2px dashed #ddd;
+		}
+		
+		.other-combination h3 {
+			color: #2c3e50;
+			margin-bottom: 15px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+		}
+		
+		.other-combination p {
+			margin-bottom: 10px;
+		}
+		
+		footer {
+			text-align: center;
+			margin-top: 50px;
+			padding-top: 25px;
+			border-top: 1px solid #eaeaea;
+			color: #777;
+			font-size: 0.95rem;
+		}
+		
+		.modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.7);
+			z-index: 1000;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+		}
+		
+		.modal-content {
+			background-color: white;
+			border-radius: 15px;
+			padding: 40px;
+			max-width: 600px;
+			width: 100%;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			position: relative;
+			animation: modalAppear 0.3s ease-out;
+		}
+		
+		@keyframes modalAppear {
+			from { opacity: 0; transform: translateY(-30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		
+		.modal-header {
+			margin-bottom: 25px;
+			text-align: center;
+		}
+		
+		.modal-header h2 {
+			color: #2c3e50;
+			font-size: 1.8rem;
+			margin-bottom: 10px;
+		}
+		
+		.modal-body {
+			margin-bottom: 30px;
+		}
+		
+		.modal-order-details {
+			background-color: #f8f9fa;
+			padding: 20px;
+			border-radius: 10px;
+			margin-bottom: 25px;
+			font-family: monospace;
+			white-space: pre-line;
+			line-height: 1.8;
+			max-height: 300px;
+			overflow-y: auto;
+		}
+		
+		.btn-copy {
+			background-color: #3498db;
+			color: white;
+			border: none;
+			padding: 12px 25px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 1rem;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin: 0 auto 20px;
+		}
+		
+		.btn-copy:hover {
+			background-color: #2980b9;
+		}
+		
+		.btn-close {
+			background-color: #e74c3c;
+			color: white;
+			border: none;
+			padding: 12px 25px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 1rem;
+			display: block;
+			margin: 0 auto;
+		}
+		
+		.btn-close:hover {
+			background-color: #c0392b;
+		}
+		
+		.toast {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			background-color: #2ecc71;
+			color: white;
+			padding: 15px 25px;
+			border-radius: 8px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			display: none;
+			z-index: 1001;
+			animation: toastSlide 0.3s ease-out;
+		}
+		
+		@keyframes toastSlide {
+			from { transform: translateX(100%); opacity: 0; }
+			to { transform: translateX(0); opacity: 1; }
+		}
+		
+		.selected {
+			border-color: #3498db;
+			box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1><i class="fas fa-shopping-cart"></i> 游戏账号一键购买</h1>
+			<p>点击商品卡片直接下单，快速便捷</p>
+		</header>
+		
+		<div class="contact-info">
+			<i class="fas fa-comments"></i>
+			<p>需要其他组合？请直接联系店长 <strong>微信：xing1234yui</strong></p>
+		</div>
+		
+		<div class="main-content">
+			<div class="products-section">
+				<h2 class="section-title">
+					<i class="fas fa-gift"></i> 商品列表
+					<span class="highlight">(●—●) 本店推荐</span>
+				</h2>
+				
+				<div class="products-grid" id="productsGrid">
+					<!-- 商品将通过JavaScript动态生成 -->
+				</div>
+				
+				<div class="other-combination">
+					<h3><i class="fas fa-plus-circle"></i> 12商品：其他组合联系店长</h3>
+					<p>如果您需要其他角色组合，请直接通过微信联系店长定制</p>
+					<p><i class="fas fa-weixin"></i> 微信：<strong>xing1234yui</strong></p>
+				</div>
+			</div>
+			
+			<div class="order-section">
+				<h2 class="section-title">
+					<i class="fas fa-file-invoice"></i> 订单详情
+				</h2>
+				
+				<div class="order-summary" id="orderSummary">
+					<div class="no-selection" id="noSelection">
+						<i class="fas fa-mouse-pointer fa-2x" style="margin-bottom: 15px; color: #aaa;"></i>
+						<p>请点击左侧商品卡片开始下单</p>
+					</div>
+					
+					<div id="orderDetails" style="display: none;">
+						<h3>订单信息</h3>
+						<div class="order-item">
+							<span>商品：</span>
+							<span id="orderProductName">-</span>
+						</div>
+						<div class="order-item">
+							<span>内容：</span>
+							<span id="orderProductContent">-</span>
+						</div>
+						<div class="order-item">
+							<span>单价：</span>
+							<span id="orderProductPrice">-</span>
+						</div>
+						<div class="order-item">
+							<span>数量：</span>
+							<span id="orderQuantity">1</span>
+						</div>
+						<div class="order-total">
+							<span>总价：</span>
+							<span id="orderTotal">-</span>
+						</div>
+					</div>
+				</div>
+				
+				<form id="orderForm">
+					<div class="form-group">
+						<label for="username"><i class="fas fa-user"></i> 用户名：</label>
+						<input type="text" id="username" name="username" required placeholder="请输入您的游戏用户名">
+					</div>
+					
+					<div class="form-group">
+						<label for="contact"><i class="fas fa-phone-alt"></i> 联系方式：</label>
+						<input type="text" id="contact" name="contact" required placeholder="微信/QQ/手机号">
+					</div>
+					
+					<div class="form-group">
+						<label for="notes"><i class="fas fa-edit"></i> 备注（选填）：</label>
+						<textarea id="notes" name="notes" rows="3" placeholder="如有特殊要求请在此说明"></textarea>
+					</div>
+					
+					<button type="button" class="btn-submit" id="generateOrder" disabled>
+						<i class="fas fa-check-circle"></i> 确认下单
+					</button>
+				</form>
+				
+				<div class="order-notice">
+					<p><i class="fas fa-info-circle"></i> 下单后，店长会在24小时内通过您留下的联系方式与您联系确认</p>
+				</div>
+			</div>
+		</div>
+		
+		<footer>
+			<p>© 2023 游戏账号购买商店 | 本页面仅供演示用途 | 客服微信：<strong>xing1234yui</strong></p>
+			<p style="margin-top: 10px; font-size: 0.85rem;">点击商品卡片即可下单，无需手动选择</p>
+		</footer>
+	</div>
+	
+	<!-- 订单确认模态框 -->
+	<div class="modal" id="orderModal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2><i class="fas fa-check-circle" style="color: #2ecc71;"></i> 订单已生成</h2>
+				<p>请将以下订单信息发送给店长微信完成购买</p>
+			</div>
+			<div class="modal-body">
+				<div class="modal-order-details" id="modalOrderDetails"></div>
+				<button class="btn-copy" id="copyOrderBtn">
+					<i class="far fa-copy"></i> 复制订单信息
+				</button>
+				<button class="btn-close" id="closeModalBtn">
+					<i class="fas fa-times"></i> 关闭窗口
+				</button>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 复制成功提示 -->
+	<div class="toast" id="toast">订单信息已复制到剪贴板！</div>
+
+	<script>
+		// 商品数据
+		const products = [
+			{ id: "00", name: "猫姬", content: "猫姬+随机5星+1000票", price: 20, recommended: true, new: true },
+			{ id: "01", name: "蝶子", content: "蝶子+随机五星+1000票", price: 30, recommended: true },
+			{ id: "02", name: "彼岸花茱莉亚", content: "彼岸花茱莉亚+3000钻+1000票", price: 40, recommended: true },
+			{ id: "03", name: "天宫关夜", content: "天宫关夜+随机五星+1000票", price: 40, new: true },
+			{ id: "04", name: "光女主", content: "光女主+随机5星+1000票子", price: 50 },
+			{ id: "05", name: "水狙", content: "水狙+随机5星+1000票子", price: 15 },
+			{ id: "06", name: "光宝马+水狙", content: "光宝马+水狙+800票子", price: 30 },
+			{ id: "07", name: "光明女神", content: "光明女神+随机5星+800票", price: 20 },
+			{ id: "08", name: "光宝马", content: "光宝马+随机5星+800票", price: 30 },
+			{ id: "09", name: "盖儿", content: "盖儿+随机5星+900票", price: 25 },
+			{ id: "10", name: "水琴+乌尔德", content: "水琴+乌尔德+800票子", price: 9 },
+			{ id: "11", name: "彩伽", content: "彩伽+随机5星+800票", price: 7 },
+			{ id: "12", name: "豪华款", content: "3300钻+350票", price: 6, recommended: true },
+			{ id: "13", name: "AOI", content: "AOI+1000票", price: 10 }
+		];
+
+		// 当前选中的商品
+		let selectedProduct = null;
+		let orderQuantity = 1;
+
+		// 渲染商品列表
+		const productsGrid = document.getElementById('productsGrid');
+		
+		products.forEach(product => {
+			const productCard = document.createElement('div');
+			productCard.className = `product-card ${product.recommended ? 'recommended' : ''}`;
+			productCard.dataset.id = product.id;
+			
+			let newBadge = '';
+			if (product.new) {
+				newBadge = '<span class="recommended-tag" style="background:linear-gradient(to right, #3498db, #2ecc71);margin-left:5px;"><i class="fas fa-star"></i> 新款</span>';
+			}
+			
+			productCard.innerHTML = `
+				<div class="product-id">${product.id}</div>
+				<h3 class="product-name">${product.name}${newBadge}</h3>
+				<p class="product-content">${product.content}</p>
+				<div class="product-price">${product.price}</div>
+				<div class="order-badge"><i class="fas fa-cart-plus"></i> 点击下单</div>
+			`;
+			
+			productsGrid.appendChild(productCard);
+		});
+
+		// 点击商品卡片选择商品
+		document.querySelectorAll('.product-card').forEach(card => {
+			card.addEventListener('click', function() {
+				// 移除之前选中卡片的样式
+				document.querySelectorAll('.product-card').forEach(c => {
+					c.classList.remove('selected');
+				});
+				
+				// 添加当前选中卡片的样式
+				this.classList.add('selected');
+				
+				// 获取商品数据
+				const productId = this.dataset.id;
+				selectedProduct = products.find(p => p.id === productId);
+				
+				// 更新订单摘要
+				updateOrderSummary();
+				
+				// 启用下单按钮
+				document.getElementById('generateOrder').disabled = false;
+				
+				// 滚动到订单区域（移动端优化）
+				if (window.innerWidth <= 768) {
+					document.querySelector('.order-section').scrollIntoView({ behavior: 'smooth' });
+				}
+			});
+		});
+
+		// 更新订单摘要
+		function updateOrderSummary() {
+			if (!selectedProduct) return;
+			
+			// 隐藏"未选择"提示
+			document.getElementById('noSelection').style.display = 'none';
+			document.getElementById('orderDetails').style.display = 'block';
+			
+			// 更新订单信息
+			document.getElementById('orderProductName').textContent = selectedProduct.name;
+			document.getElementById('orderProductContent').textContent = selectedProduct.content;
+			document.getElementById('orderProductPrice').textContent = `¥${selectedProduct.price}`;
+			document.getElementById('orderQuantity').textContent = orderQuantity;
+			
+			const total = selectedProduct.price * orderQuantity;
+			document.getElementById('orderTotal').textContent = `¥${total}`;
+		}
+
+		// 确认下单
+		document.getElementById('generateOrder').addEventListener('click', function() {
+			if (!selectedProduct) return;
+			
+			const username = document.getElementById('username').value.trim();
+			const contact = document.getElementById('contact').value.trim();
+			
+			if (!username || !contact) {
+				alert('请填写游戏用户名和联系方式！');
+				return;
+			}
+			
+			const notes = document.getElementById('notes').value.trim();
+			const total = selectedProduct.price * orderQuantity;
+			
+			// 生成订单详情
+			const orderDetails = `
+==================== 游戏账号购买订单 ====================
+订单时间：${new Date().toLocaleString('zh-CN')}
+订单编号：${generateOrderId()}
+
+【商品信息】
+商品编号：${selectedProduct.id}
+商品名称：${selectedProduct.name}
+商品内容：${selectedProduct.content}
+商品单价：¥${selectedProduct.price}
+购买数量：${orderQuantity}
+订单总价：¥${total}
+
+【买家信息】
+用户名：${username}
+联系方式：${contact}
+${notes ? `特殊备注：${notes}` : '特殊备注：无'}
+
+【重要提示】
+1. 请将本订单信息发送给店长微信：xing1234yui
+2. 店长会在24小时内与您联系确认订单
+3. 请确保联系方式正确，以便店长联系您
+4. 付款后请妥善保管交易凭证
+
+=======================================================
+感谢您的购买！祝您游戏愉快！
+			`;
+			
+			// 显示订单详情到模态框
+			document.getElementById('modalOrderDetails').textContent = orderDetails;
+			
+			// 显示模态框
+			document.getElementById('orderModal').style.display = 'flex';
+			
+			// 自动滚动到顶部
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+
+		// 生成订单ID
+		function generateOrderId() {
+			const date = new Date();
+			const year = date.getFullYear().toString().slice(-2);
+			const month = (date.getMonth() + 1).toString().padStart(2, '0');
+			const day = date.getDate().toString().padStart(2, '0');
+			const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+			return `DD${year}${month}${day}${random}`;
+		}
+
+		// 复制订单信息
+		document.getElementById('copyOrderBtn').addEventListener('click', function() {
+			const orderText = document.getElementById('modalOrderDetails').textContent;
+			
+			// 使用现代剪贴板API
+			navigator.clipboard.writeText(orderText).then(() => {
+				// 显示成功提示
+				const toast = document.getElementById('toast');
+				toast.style.display = 'block';
+				
+				// 3秒后隐藏提示
+				setTimeout(() => {
+					toast.style.display = 'none';
+				}, 3000);
+				
+				// 更新按钮文本
+				this.innerHTML = '<i class="fas fa-check"></i> 已复制';
+				this.style.backgroundColor = '#2ecc71';
+				
+				setTimeout(() => {
+					this.innerHTML = '<i class="far fa-copy"></i> 复制订单信息';
+					this.style.backgroundColor = '#3498db';
+				}, 2000);
+			}).catch(err => {
+				console.error('复制失败:', err);
+				alert('复制失败，请手动复制订单信息');
+			});
+		});
+
+		// 关闭模态框
+		document.getElementById('closeModalBtn').addEventListener('click', function() {
+			document.getElementById('orderModal').style.display = 'none';
+			
+			// 重置表单
+			document.getElementById('orderForm').reset();
+			document.getElementById('generateOrder').disabled = true;
+			
+			// 重置选择状态
+			document.querySelectorAll('.product-card').forEach(c => {
+				c.classList.remove('selected');
+			});
+			
+			selectedProduct = null;
+			
+			// 显示"未选择"提示
+			document.getElementById('noSelection').style.display = 'block';
+			document.getElementById('orderDetails').style.display = 'none';
+		});
+
+		// 点击模态框外部关闭
+		document.getElementById('orderModal').addEventListener('click', function(e) {
+			if (e.target === this) {
+				document.getElementById('closeModalBtn').click();
+			}
+		});
+
+		// 页面加载完成后默认选择第一个推荐商品
+		window.addEventListener('DOMContentLoaded', () => {
+			// 找到第一个推荐商品
+			const firstRecommended = products.find(p => p.recommended);
+			if (firstRecommended) {
+				// 模拟点击第一个推荐商品
+				const firstCard = document.querySelector(`.product-card[data-id="${firstRecommended.id}"]`);
+				if (firstCard) {
+					firstCard.click();
+				}
+			}
+		});
+	</script>
+</body>
+</html>
